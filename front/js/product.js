@@ -28,23 +28,25 @@ function addToCart() {
     const quantity = document.getElementById("quantity").value;
     const color = document.getElementById("colors").value;
     let cart = JSON.parse(localStorage.getItem("cart"));
-
-    cart.push({id: 415b7cacb65d43b2b5c1ff70f3393ad1, color: Black/Red, quantity: 1});
-
     if (cart === null) {
         cart = [];
-        console.log("Cart is empty")
+    }
+
+    const cartItemFound = cart.find(checkItemFound)
+    function checkItemFound(item) {
+        return item.id === id && item.color === color;
+    }
+    if (cartItemFound) {
+        console.log("itemFound")
+        cartItemFound.quantity += parseInt(quantity)
     } else {
+        console.log("itemNotFound")
+        cart.push({ id: id, color: color, quantity: parseInt(quantity) });
 
     }
-    console.log(cart)
-    //TODO check to see if cart array already has an item with the same color and id
-    //TODO if it does then increase its quantity with the quantity the user selected
-    //TODO if it does not then push a new cart item on to the array
 
-    //NOTE cart item looks like this object { id: productId, quantity: quantity, color: color }
-    //TODO set cart array back into local storage
-    //NOTE Use JSON.stringify(...)
+    localStorage.setItem("cart", JSON.stringify(cart));
+
 
 
 
