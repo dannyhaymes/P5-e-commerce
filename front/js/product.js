@@ -32,10 +32,9 @@ function addToCart() {
         cart = [];
     }
 
-    const cartItemFound = cart.find(checkItemFound)
-    function checkItemFound(item) {
-        return item.id === id && item.color === color;
-    }
+    const cartItemFound = cart.find(item => item.id === id && item.color === color)
+
+
     if (cartItemFound) {
         console.log("itemFound")
         cartItemFound.quantity += parseInt(quantity)
@@ -47,14 +46,5 @@ function addToCart() {
 
     localStorage.setItem("cart", JSON.stringify(cart));
 
-
-
-
-
-    // if (localStorage) {
-    //     localStorage.setItem("addToCart");
-    //     alert("Added to Cart" + localStorage.getItem("addToCart"))
-    // }
 }
 
-//TODO milestone 7 Read information on PDF and ask Scott for help if needed on Slack
