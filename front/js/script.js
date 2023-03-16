@@ -1,3 +1,4 @@
+//Backend DO NOT DELTE
 fetch('http://localhost:3000/api/products')
     .then(data => {
         return data.json();
@@ -6,6 +7,7 @@ fetch('http://localhost:3000/api/products')
         displayProducts(products)
     });
 
+    //Use loops to display card
 function displayProducts(products) {
     const productCardHolder = document.getElementById("items")
     for (let i = 0; i < products.length; i++) {

@@ -1,8 +1,10 @@
+//Backend DO NOT DELETE
 fetch('http://localhost:3000/api/products')
     .then(data => {
         return data.json();
     })
     .then(products => {
+        addEventListenerToContactForm()
         displayCart(products)
     });
 
@@ -13,6 +15,8 @@ function getStoredCartItems() {
 function saveCartItemsToStorage(items) {
     localStorage.setItem('cart', JSON.stringify(items))
 }
+
+//Show selected product and product details in the cart
 function displayCart(products) {
     let cart = getStoredCartItems()
     if (cart === null) {
@@ -116,6 +120,7 @@ function getCartItemsElements() {
     return document.querySelectorAll('.cart__item');
 }
 
+//Delete items from cart
 function handleDeleteCartItem(productId, allProducts) {
     const storedCart = getStoredCartItems()
     const updatedCart = storedCart.filter(item => item.id !== productId)
@@ -170,3 +175,72 @@ function updateCartTotals(values) {
     totalArticlesElement.textContent = articles
 }
 
+function addEventListenerToContactForm() {
+    //TODO add change event listeners to for input field
+    document.getElementById('firstName').addEventListener("change", validateFirstName);
+    document.getElementById('lastName').addEventListener("change", validateLastName);
+    document.getElementById('address').addEventListener("change", validateAddress);
+    document.getElementById('city').addEventListener("change", validateCity);
+    document.getElementById('email').addEventListener("change", validateEmail);
+    // input.addEventListener("change",(contactCity) => {
+    //     const contactCity = document.getElementById('city').value
+    // })
+    // input.addEventListener("change",(contactAddress) => {
+    //     const contactAddress =document.getElementById('address').value
+    // })
+    // input.addEventListener("change",(contactEmail) => {
+    //     const contactEmail =document.getElementById('email').value
+    // })
+    //NOTE Add event listener to order button that calls order function (Click event listener)
+}
+function validateFirstName($event) {
+    const changedElement=$event.target;
+    const alphaOnlyRegex= /^[a-zA-Z]+$/
+    const isValid=alphaOnlyRegex.test(changedElement.value)
+    const errorMessageElement=document.getElementById('firstNameErrorMsg')
+    if (!isValid){
+    errorMessageElement.innerText="Enter valid input"
+    }
+    //TODO Validate first name using regex let res = /^[a-zA-Z]+$/.test('sfjd');
+} 
+function validateLastName($event) {
+    const changedElement=$event.target;
+    const alphaOnlyRegex= /^[a-zA-Z]+$/
+    const isValid=alphaOnlyRegex.test(changedElement.value)
+    const errorMessageElement=document.getElementById('lastNameErrorMsg')
+    if (!isValid){
+        errorMessageElement.innerText="Enter valid input"
+        }
+}
+function validateAddress($event) {
+    const changedElement=$event.target;
+    const regex= /^[A-Za-z-0-9]+$/
+    const isValid=regex.test(changedElement.value)
+    const errorMessageElement=document.getElementById('addressErrorMsg')
+    if (!isValid){
+        errorMessageElement.innerText="Enter valid input"
+        }
+}
+function validateCity($event) {
+    const changedElement=$event.target;
+    const AlphaNumRegex= /^[A-Za-z-0-9]+$/
+    const isValid=AlphaNumRegex.test(changedElement.value)
+    const errorMessageElement=document.getElementById('cityErrorMsg')
+    if (!isValid){
+        errorMessageElement.innerText="Enter valid input"
+        }    
+}
+function validateEmail($event) {
+    const changedElement=$event.target;
+    const specialCharacterRegex= /\S+@\S+\.\S+/
+    const isValid=specialCharacterRegexest(changedElement.value)
+    const errorMessageElement=document.getElementById('emailErrorMsg')
+    if (!isValid){
+        errorMessageElement.innerText="Enter valid input"
+        }
+}
+
+//TODO Declare order function
+//NOTE Inside this fuction validate fields one last time
+//NOTE Use fetch API to post order request
+//NOTE Redirect user to confirmation page with order ID that comes back from previous fetch API

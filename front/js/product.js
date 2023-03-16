@@ -11,18 +11,21 @@ fetch(`http://localhost:3000/api/products/${id}`)
         displayProduct(product)
     });
 
+//Collect data relevant to the selected product
 function displayProduct(product) {
     document.querySelector(".item__img").innerHTML = `<img src="${product.imageUrl}" alt="${product.altTxt}">`;
     document.getElementById("title").innerText = `${product.name}`;
     document.getElementById("price").innerText = `${product.price}`;
     document.getElementById("description").innerText = `${product.description}`;
     const selectElement = document.getElementById(`colors`);
+    //Allow color to be selected from options
     for (let color of product.colors) {
         selectElement.innerHTML += `<option value=${color}>${color}</option>`;
     }
     console.log(product)
 }
 
+//Allow quantities to be added from 1-99
 document.getElementById("addToCart").addEventListener("click", addToCart);
 function addToCart() {
     const quantity = document.getElementById("quantity").value;
@@ -32,6 +35,7 @@ function addToCart() {
         cart = [];
     }
 
+    //Use data from selected product and options to add to the cart
     const cartItemFound = cart.find(item => item.id === id && item.color === color)
 
 
