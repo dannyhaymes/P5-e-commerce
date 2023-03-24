@@ -22,7 +22,6 @@ function displayProduct(product) {
     for (let color of product.colors) {
         selectElement.innerHTML += `<option value=${color}>${color}</option>`;
     }
-    console.log(product)
 }
 
 //Allow quantities to be added from 1-99
@@ -40,10 +39,8 @@ function addToCart() {
 
 
     if (cartItemFound) {
-        console.log("itemFound")
         cartItemFound.quantity += parseInt(quantity)
     } else {
-        console.log("itemNotFound")
         cart.push({ id: id, color: color, quantity: parseInt(quantity) });
 
     }

@@ -20,7 +20,7 @@ function displayProducts(products) {
         </article>
       </a>`
         productCardHolder.innerHTML += productCard
-        console.log(productCard)
+
 
     }
 }

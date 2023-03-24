@@ -176,71 +176,138 @@ function updateCartTotals(values) {
 }
 
 function addEventListenerToContactForm() {
-    //TODO add change event listeners to for input field
     document.getElementById('firstName').addEventListener("change", validateFirstName);
     document.getElementById('lastName').addEventListener("change", validateLastName);
     document.getElementById('address').addEventListener("change", validateAddress);
     document.getElementById('city').addEventListener("change", validateCity);
     document.getElementById('email').addEventListener("change", validateEmail);
-    // input.addEventListener("change",(contactCity) => {
-    //     const contactCity = document.getElementById('city').value
-    // })
-    // input.addEventListener("change",(contactAddress) => {
-    //     const contactAddress =document.getElementById('address').value
-    // })
-    // input.addEventListener("change",(contactEmail) => {
-    //     const contactEmail =document.getElementById('email').value
-    // })
-    //NOTE Add event listener to order button that calls order function (Click event listener)
 }
 function validateFirstName($event) {
-    const changedElement=$event.target;
-    const alphaOnlyRegex= /^[a-zA-Z]+$/
-    const isValid=alphaOnlyRegex.test(changedElement.value)
-    const errorMessageElement=document.getElementById('firstNameErrorMsg')
-    if (!isValid){
-    errorMessageElement.innerText="Enter valid input"
+    const changedElement = $event.target;
+    checkIfFirstNameIsValid(changedElement);
+
+}
+document.getElementById('order').addEventListener('click', submitOrder)
+function checkIfFirstNameIsValid(changedElement) {
+    const alphaOnlyRegex = /^[a-zA-Z]+$/;
+    const isValid = alphaOnlyRegex.test(changedElement.value);
+    const errorMessageElement = document.getElementById('firstNameErrorMsg');
+    if (!isValid) {
+        errorMessageElement.innerText = "Enter valid input";
     }
-    //TODO Validate first name using regex let res = /^[a-zA-Z]+$/.test('sfjd');
-} 
-function validateLastName($event) {
-    const changedElement=$event.target;
-    const alphaOnlyRegex= /^[a-zA-Z]+$/
-    const isValid=alphaOnlyRegex.test(changedElement.value)
-    const errorMessageElement=document.getElementById('lastNameErrorMsg')
-    if (!isValid){
-        errorMessageElement.innerText="Enter valid input"
-        }
-}
-function validateAddress($event) {
-    const changedElement=$event.target;
-    const regex= /^[A-Za-z-0-9]+$/
-    const isValid=regex.test(changedElement.value)
-    const errorMessageElement=document.getElementById('addressErrorMsg')
-    if (!isValid){
-        errorMessageElement.innerText="Enter valid input"
-        }
-}
-function validateCity($event) {
-    const changedElement=$event.target;
-    const AlphaNumRegex= /^[A-Za-z-0-9]+$/
-    const isValid=AlphaNumRegex.test(changedElement.value)
-    const errorMessageElement=document.getElementById('cityErrorMsg')
-    if (!isValid){
-        errorMessageElement.innerText="Enter valid input"
-        }    
-}
-function validateEmail($event) {
-    const changedElement=$event.target;
-    const specialCharacterRegex= /\S+@\S+\.\S+/
-    const isValid=specialCharacterRegexest(changedElement.value)
-    const errorMessageElement=document.getElementById('emailErrorMsg')
-    if (!isValid){
-        errorMessageElement.innerText="Enter valid input"
-        }
+    else {
+        errorMessageElement.innerText = "";
+    }
+    return isValid
 }
 
-//TODO Declare order function
-//NOTE Inside this fuction validate fields one last time
-//NOTE Use fetch API to post order request
-//NOTE Redirect user to confirmation page with order ID that comes back from previous fetch API
+function validateLastName($event) {
+    const changedElement = $event.target;
+    checkIfLastNameIsValid(changedElement);
+}
+document.getElementById('order').addEventListener('click', submitOrder)
+function checkIfLastNameIsValid(changedElement) {
+    const alphaOnlyRegex = /^[a-zA-Z]+$/;
+    const isValid = alphaOnlyRegex.test(changedElement.value);
+    const errorMessageElement = document.getElementById('lastNameErrorMsg');
+    if (!isValid) {
+        errorMessageElement.innerText = "Enter valid input";
+    }
+    else {
+        errorMessageElement.innerText = "";
+    }
+    return isValid
+}
+
+function validateAddress($event) {
+    const changedElement = $event.target;
+    checkIfAddressIsValid(changedElement);
+}
+
+document.getElementById('order').addEventListener('click', submitOrder)
+function checkIfAddressIsValid(changedElement) {
+    const regex = /^[a-z\d\-_\s]+$/i;
+    const isValid = regex.test(changedElement.value);
+    const errorMessageElement = document.getElementById('addressErrorMsg');
+    if (!isValid) {
+        errorMessageElement.innerText = "Enter valid input";
+    }
+    else {
+        errorMessageElement.innerText = "";
+    }
+    return isValid
+}
+
+function validateCity($event) {
+    const changedElement = $event.target;
+    checkIfCityValid(changedElement);
+}
+
+document.getElementById('order').addEventListener('click', submitOrder)
+function checkIfCityValid(changedElement) {
+    const regexAlphaSpace = /^[A-Za-z\s]*$/;
+    const isValid = regexAlphaSpace.test(changedElement.value);
+    const errorMessageElement = document.getElementById('cityErrorMsg');
+    if (!isValid) {
+        errorMessageElement.innerText = "Enter valid input";
+    }
+    else {
+        errorMessageElement.innerText = "";
+    }
+    return isValid
+}
+
+function validateEmail($event) {
+    const changedElement = $event.target;
+    checkIfEmailValid(changedElement);
+}
+
+document.getElementById('order').addEventListener('click', submitOrder);
+function checkIfEmailValid(changedElement) {
+    const specialCharacterRegex = /\S+@\S+\.\S+/g;
+    const isValid = specialCharacterRegex.test(changedElement.value);
+    const errorMessageElement = document.getElementById('emailErrorMsg');
+    if (!isValid) {
+        errorMessageElement.innerText = "Enter valid input";
+    }
+    else {
+        errorMessageElement.innerText = "";
+    }
+    return isValid
+}
+
+function submitOrder($event) {
+    $event.preventDefault()
+    console.log('fired')
+    const firstName = document.getElementById('firstName').value;
+    const lastName = document.getElementById('lastName').value;
+    const address = document.getElementById('address').value;
+    const city = document.getElementById('city').value;
+    const email = document.getElementById('email').value;
+
+    //TODO Update isValid variable below to use a logical and operator (&&)
+    const isValid = validateAll();
+    if (isValid) {
+        console.log('submitting order')
+        //TODO `Code fetch API for submitting the order
+
+        //NOTE Look at example from resource
+        //NOTE Create order object like API request in TC
+        //NOTE Create options object
+        //NOTE Use fetch API to post order request
+        //NOTE Redirect user to confirmation page with order ID that comes back from previous fetch API
+    }
+}
+
+
+
+
+
+
+
+
+
+function validateAll() {
+    return checkIfFirstNameValid(document.getElementById('firstName')) && checkIfLastNameIsValid(document.getElementById('lastName')) && checkIfAddressIsValid(document.getElementById('address')) && checkIfCityIsValid(document.getElementById('city')) && checkIfEmailIsValid(document.getElementById('email'));
+}
+
