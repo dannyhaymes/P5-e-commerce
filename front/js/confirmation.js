@@ -3,4 +3,5 @@ const urlParams = new URLSearchParams(queryString);
 const orderId = urlParams.get('orderId')
 console.log(orderId);
 
-//TODO Insert order ID into page
+// Insert order ID inserted to page
+document.getElementById('orderId').innerText = orderId

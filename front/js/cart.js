@@ -174,7 +174,7 @@ function updateCartTotals(values) {
     totalElement.textContent = total
     totalArticlesElement.textContent = articles
 }
-
+//Event listeners to approve changes
 function addEventListenerToContactForm() {
     document.getElementById('firstName').addEventListener("change", validateFirstName);
     document.getElementById('lastName').addEventListener("change", validateLastName);
@@ -187,6 +187,7 @@ function validateFirstName($event) {
     checkIfFirstNameIsValid(changedElement);
 
 }
+//Use regex for each form field to approve
 document.getElementById('order').addEventListener('click', submitOrder)
 function checkIfFirstNameIsValid(changedElement) {
     const alphaOnlyRegex = /^[a-zA-Z]+$/;
@@ -285,29 +286,65 @@ function submitOrder($event) {
     const city = document.getElementById('city').value;
     const email = document.getElementById('email').value;
 
-    //TODO Update isValid variable below to use a logical and operator (&&)
-    const isValid = validateAll();
+    const isValid = validateAll()
+
+    
     if (isValid) {
-        console.log('submitting order')
-        //TODO `Code fetch API for submitting the order
+        console.log('submittingOrder')
+        const productIds = getStoredCartItems().map(cartItem => cartItem.id)
+            //Order object for product details and contacts
+        const order = {
+            "contact": {
+                "firstName": firstName,
+                "lastName": lastName,
+                "city": city,
+                "address": address,
+                "email": email
+            },
+            "products": productIds
+        }
+        const options = {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify(order)
+        }
+            //Use fetch API to post order request
+        fetch('http://localhost:3000/api/products/order', options)
+            .then(data => {
+                if (!data.ok) {
+                    throw Error(data.status);
+                }
+                return data.json();
+            }).then(result => {
+                console.log(result.orderId);
+                localStorage.removeItem('cart')
+                //Redirect user to confirmation page with order ID that comes back from previous fetch API
+                window.location.href = `./confirmation.html?orderId=${result.orderId}`;
 
-        //NOTE Look at example from resource
-        //NOTE Create order object like API request in TC
-        //NOTE Create options object
-        //NOTE Use fetch API to post order request
-        //NOTE Redirect user to confirmation page with order ID that comes back from previous fetch API
+            }).catch(e => {
+                console.log(e);
+            });
     }
+
 }
-
-
-
-
-
-
-
-
-
 function validateAll() {
-    return checkIfFirstNameValid(document.getElementById('firstName')) && checkIfLastNameIsValid(document.getElementById('lastName')) && checkIfAddressIsValid(document.getElementById('address')) && checkIfCityIsValid(document.getElementById('city')) && checkIfEmailIsValid(document.getElementById('email'));
+    const isFirstNameValid = checkIfFirstNameIsValid(document.getElementById('firstName'))
+    const isSurnameValid = checkIfLastNameIsValid(document.getElementById('lastName'))
+    const isAddressValid = checkIfAddressIsValid(document.getElementById('address'))
+    const isCityValid = checkIfCityValid(document.getElementById('city'))
+    const isEmailValid = checkIfEmailValid(document.getElementById('email'))
+
+    //Update isValid variable below to use a logical and operator (&&)
+    return isFirstNameValid && isSurnameValid && isAddressValid && isCityValid && isEmailValid
+
+
 }
+
+
+
+
+
+
+
+
 
