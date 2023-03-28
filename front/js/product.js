@@ -41,7 +41,8 @@ function addToCart() {
     if (cartItemFound) {
         cartItemFound.quantity += parseInt(quantity)
     } else {
-        cart.push({ id: id, color: color, quantity: parseInt(quantity) });
+        cart.push({ id: id, color: color, quantity: parseInt(quantity) })
+        alert('Cart item added');
 
     }
 

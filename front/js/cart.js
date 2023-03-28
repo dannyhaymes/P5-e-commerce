@@ -29,19 +29,21 @@ function displayCart(products) {
     for (let i = 0; i < products.length; i++) {
         const product = products[i];
         //NOTE Find cart item that matches product id
-        const cartItemFound = cart.find(checkItemFound)
+        const cartItemsFound = cart.filter(checkItemFound)
         function checkItemFound(item) {
-            return item.id === product._id;
         }
-        if (!cartItemFound) {
+        if (!cartItemsFound) {
             continue
         }
         //NOTE Update product with quantity and color
-        product.quantity = cartItemFound.quantity
-        product.selectiveColor = cartItemFound.color
-        //NOTE Append product to the result
-        renderCartItem(cartItemsContainer, product)
-        updatedProducts.push(product)
+        for (let i = 0; i < cartItemsFound.length; i++) {
+            const cartItem = cartItemsFound[i];
+            product.quantity = cartItem.quantity
+            product.selectiveColor = cartItemsFound.color
+            //NOTE Append product to the result
+            renderCartItem(cartItemsContainer, product)
+            updatedProducts.push(product)
+        }
 
 
     }
@@ -288,11 +290,11 @@ function submitOrder($event) {
 
     const isValid = validateAll()
 
-    
+
     if (isValid) {
         console.log('submittingOrder')
         const productIds = getStoredCartItems().map(cartItem => cartItem.id)
-            //Order object for product details and contacts
+        //Order object for product details and contacts
         const order = {
             "contact": {
                 "firstName": firstName,
@@ -308,7 +310,7 @@ function submitOrder($event) {
             headers: { 'content-type': 'application/json' },
             body: JSON.stringify(order)
         }
-            //Use fetch API to post order request
+        //Use fetch API to post order request
         fetch('http://localhost:3000/api/products/order', options)
             .then(data => {
                 if (!data.ok) {
