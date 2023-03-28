@@ -31,6 +31,7 @@ function displayCart(products) {
         //NOTE Find cart item that matches product id
         const cartItemsFound = cart.filter(checkItemFound)
         function checkItemFound(item) {
+            return item.id === product._id;
         }
         if (!cartItemsFound) {
             continue
@@ -39,7 +40,7 @@ function displayCart(products) {
         for (let i = 0; i < cartItemsFound.length; i++) {
             const cartItem = cartItemsFound[i];
             product.quantity = cartItem.quantity
-            product.selectiveColor = cartItemsFound.color
+            product.selectiveColor = cartItem.color
             //NOTE Append product to the result
             renderCartItem(cartItemsContainer, product)
             updatedProducts.push(product)
@@ -84,14 +85,14 @@ function renderCartItem(container, product) {
 }
 
 
-function handleQuantityChange(productId, newQuantity) {
+function handleQuantityChange(productId, color, newQuantity) {
     // Update local storage
     const storedCart = getStoredCartItems()
 
     // Go through all cart items in storage and if it matches
     // the product, update the quantity
     const updatedCart = storedCart.map(item => {
-        if (item.id === productId) {
+        if (item.id === productId && item.color == color) {
             item.quantity = newQuantity
         }
         return item
@@ -123,9 +124,10 @@ function getCartItemsElements() {
 }
 
 //Delete items from cart
-function handleDeleteCartItem(productId, allProducts) {
+function handleDeleteCartItem(productId, color, allProducts) {
     const storedCart = getStoredCartItems()
-    const updatedCart = storedCart.filter(item => item.id !== productId)
+    console.log(productId + " ##### " + color)
+    const updatedCart = storedCart.filter(item => item.id !== productId || item.color !=color)
     saveCartItemsToStorage(updatedCart)
     displayCart(allProducts)
 
@@ -138,20 +140,24 @@ function setupEvents(products) {
         // Find delete button for this item
         const deleteButton = element.querySelector('.cart__item__content__settings__delete')
         // On delete call a function that does the work
-        deleteButton.addEventListener('click', (e) => {
-            const id = element.getAttribute('data-id')
-            handleDeleteCartItem(id, products)
+        deleteButton.addEventListener('click', (event) => {
+            const cartItemElement = event.target.closest('article')
+            const id = cartItemElement.dataset.id;
+            const color = cartItemElement.dataset.color;
+            handleDeleteCartItem(id, color, products)
         })
 
         // Find the input for the cart item
         const input = element.querySelector('input.itemQuantity')
         // Add a change listener so we can update local storage and re-render
         input.addEventListener('change', (event) => {
-            const id = element.getAttribute('data-id')
+            const cartItemElement = event.target.closest('article');
+            const id = cartItemElement.dataset.id;
+            const color = cartItemElement.dataset.color;
             // Get the new input value and parse it to a number
             const newQuantity = parseInt(event.target.value)
             // Handle change
-            handleQuantityChange(id, newQuantity)
+            handleQuantityChange(id, color, newQuantity)
         })
     })
 }
